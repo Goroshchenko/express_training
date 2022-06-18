@@ -9,6 +9,8 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+var config = require('./config')();
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,3 +22,9 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 module.exports = app;
+
+http.createServer(app).listen(config.port, function(){
+    console.log(
+        'Express server listening on port ' + config.port
+    );
+});
