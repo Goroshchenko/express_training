@@ -12,6 +12,7 @@ var app = express();
 
 var config = require('./config')();
 
+app.set('views', __dirname + '/templates');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
