@@ -3,6 +3,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var lessMiddleware = require('less-middleware');
 var logger = require('morgan');
+var http = require('http');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -23,8 +24,19 @@ app.use('/users', usersRouter);
 
 module.exports = app;
 
-http.createServer(app).listen(config.port, function(){
-    console.log(
-        'Express server listening on port ' + config.port
-    );
+MongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port + '/fastdelivery', function(err, db) {
+    if(err) {
+        console.log('Sorry, there is no mongo db server running.');
+    } else {
+        var attachDB = function(req, res, next) {
+            req.db = db;
+            next();
+        };
+        http.createServer(app).listen(config.port, function(){
+            console.log(
+                'Successfully connected to mongodb://' + config.mongo.host + ':' + config.mongo.port,
+                '\nExpress server listening on port ' + config.port
+            );
+        });
+    }
 });
