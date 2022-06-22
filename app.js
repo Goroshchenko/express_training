@@ -5,8 +5,7 @@ var lessMiddleware = require('less-middleware');
 var logger = require('morgan');
 var http = require('http');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var Admin = require('./controllers/Admin');
 
 var app = express();
 
@@ -33,6 +32,9 @@ MongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port +
             req.db = db;
             next();
         };
+        app.all('/admin*', attachDB, function(req, res, next) {
+            Admin.run(req, res, next);
+        });
         http.createServer(app).listen(config.port, function(){
             console.log(
                 'Successfully connected to mongodb://' + config.mongo.host + ':' + config.mongo.port,
