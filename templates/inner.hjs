@@ -11,7 +11,7 @@
 			<nav>
 				<div class="content">
 					<a href="/" class="logo">
-						<img src="/images/logo.png" alt="FastDelivery">
+						<img src="/images/logo.png" alt="Packrafting">
 					</a>
                     <ul class="menu">
                         <li><a href="/">Home</a></li>
@@ -38,7 +38,7 @@
             <!-- footer -->
             <div class="footer">
                 <div class="content">
-                    fast delivery &copy; 2013
+                    bolotohod &copy; 2022
                 </div>
             </div>
             

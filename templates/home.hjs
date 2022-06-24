@@ -11,7 +11,7 @@
 			<nav>
 				<div class="content">
 					<a href="/" class="logo">
-						<img src="/images/logo.png" alt="FastDelivery">
+						<img src="/images/logo.png" alt="Packrafting">
 					</a>
                     <ul class="menu">
                         <li><a href="/">Home</a></li>
@@ -26,7 +26,7 @@
             
             <!-- home page -->
             <div class="home">
-                <h1>Fast As Hell <small>The fastest-growing company of 2012</small></h1>
+                <h1>ultra-slim & ultra-light <small>Black Pike TPU Classik raft </small></h1>
                 <div class="teaser">
                     <div class="content">
                         <img src="/images/home-teaser-image.jpg" alt="" class="home-teaser-image" />
@@ -52,7 +52,7 @@
             <!-- footer -->
             <div class="footer">
                 <div class="content">
-                    fast delivery &copy; 2013
+                    bolotohod &copy; 2022
                 </div>
             </div>
             
