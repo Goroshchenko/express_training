@@ -3,6 +3,7 @@ var BaseController = require("./Base"),
     model = new (require("../models/ContentModel")),
     crypto = require("crypto"),
     fs = require("fs");
+const bodyParser = require("body-parser");
 
 module.exports = BaseController.extend({
     name: "Admin",

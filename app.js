@@ -5,39 +5,50 @@ var lessMiddleware = require('less-middleware');
 var logger = require('morgan');
 var http = require('http');
 
+var favicon = require('serve-favicon');
+var methodOverride = require('method-override');
+var errorHandler = require('errorhandler');
+
 var   Admin = require('./controllers/Admin');
 var   Home = require('./controllers/Home');
 var   Blog = require('./controllers/Blog');
 var   Page = require('./controllers/Page');
 var session = require('express-session');
+var bodyParser = require('body-parser');
 
 var app = express();
-
 
 var MongoClient = require('mongodb').MongoClient;
 
 var config = require('./config')();
 
-app.set('views', __dirname + '/templates');
+app.set('views', path.join(__dirname + '/templates'));
+app.set('view engine', 'hjs');
 app.use(logger('dev'));
+
+app.use(favicon(path.join(__dirname, '/public/favicon.ico')))
+app.use(methodOverride());
+
 app.use(express.json());
 app.use(cookieParser('fast-delivery-site'));
 app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
-app.use(session());
-
+app.use(session({
+    resave: true,
+    saveUninitialized: true,
+    secret: 'none'
+}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.text());
+app.use(bodyParser.raw());
 
 app.use(require('less-middleware')({ src: __dirname + '/public' }));
-app.set('view engine', 'hjs');
 
-app.set('views', __dirname + '/templates');
-app.set('view engine', 'hjs');
-
-app.use(require('less-middleware')({ src: __dirname + '/public' }));
-app.use(express.static(path.join(__dirname, 'public')));
-
-module.exports = app;
+if (app.get('env') === 'development') {
+    app.use(errorHandler())
+}
 
 MongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port + '/fastdelivery', function(err, db) {
     if(err) {
@@ -49,9 +60,6 @@ MongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port +
         };
         app.all('/admin*', attachDB, function(req, res, next) {
             Admin.run(req, res, next);
-        });
-        app.all('/', attachDB, function(req, res, next) {
-            Home.run(req, res, next);
         });
         app.all('/blog/:id', attachDB, function(req, res, next) {
             Blog.runArticle(req, res, next);
@@ -68,7 +76,10 @@ MongoClient.connect('mongodb://' + config.mongo.host + ':' + config.mongo.port +
         app.all('/contacts', attachDB, function(req, res, next) {
             Page.run('contacts', req, res, next);
         });
-        http.createServer(app).listen(config.port, function(){
+        app.all('/', attachDB, function(req, res, next) {
+            Home.run(req, res, next);
+        });
+        http.createServer(app).listen(config.port, function() {
             console.log(
                 'Successfully connected to mongodb://' + config.mongo.host + ':' + config.mongo.port,
                 '\nExpress server listening on port ' + config.port
